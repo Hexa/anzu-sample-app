@@ -1,0 +1,12 @@
+name: anzu-sample-app
+version: 0.1.0
+
+authors:
+  - Hexa <hexa.diary@gmail.com>
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: sdogruyol/kemal
+    branch: master

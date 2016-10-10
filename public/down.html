@@ -1,0 +1,47 @@
+<html lang="ja">
+  <head>
+    <title>down</title>
+  </head>
+  <body>
+    <h1>down</h1>
+    <video id="remote-video" autoplay=""></video>
+
+    <script src="/js/anzu.js"></script>
+    <script type="text/javascript">
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/channel_id/");
+      xhr.onreadystatechange = () => {
+        if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
+          var response = JSON.parse(xhr.response);
+          getDownstreamToken(response.channelId);
+        }
+      };
+      xhr.send(null);
+
+      function getDownstreamToken(channelId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/downstream_token/");
+        xhr.onreadystatechange = () => {
+          if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
+            var response = JSON.parse(xhr.response);
+            startAnzu(channelId, response.downstreamToken);
+          }
+        };
+        xhr.send(null);
+      }
+
+      function startAnzu(channelId, downstreamToken) {
+        var anzuDownstream = new Anzu("downstream");
+        anzuDownstream.start(channelId, downstreamToken)
+          .then(params => {
+            var videoElement = document.getElementById("remote-video");
+            videoElement.src = window.URL.createObjectURL(params.stream);
+            videoElement.play();
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>

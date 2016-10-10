@@ -1,0 +1,47 @@
+<html lang="ja">
+  <head>
+    <title>up</title>
+  </head>
+  <body>
+    <h1>up</h1>
+    <video id="local-video" autoplay></video>
+
+    <script src="/js/anzu.js"></script>
+    <script type="text/javascript">
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/channel_id/");
+      xhr.onreadystatechange = () => {
+        if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
+          var response = JSON.parse(xhr.response);
+          getUpstreamToken(response.channelId);
+        }
+      };
+      xhr.send(null);
+
+      function getUpstreamToken(channelId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/upstream_token/");
+        xhr.onreadystatechange = () => {
+          if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
+            var response = JSON.parse(xhr.response);
+            startAnzu(channelId, response.upstreamToken);
+          }
+        };
+        xhr.send(null);
+      }
+
+      var anzuUpstream = new Anzu("upstream");
+      function startAnzu(channelId, upstreamToken) {
+        anzuUpstream.start(channelId, upstreamToken, {video: true, audio: true})
+          .then(params => {
+            var videoElement = document.getElementById("local-video");
+            videoElement.src = window.URL.createObjectURL(params.stream);
+            videoElement.play();
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
