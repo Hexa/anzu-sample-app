@@ -9,7 +9,7 @@
     <script src="/js/anzu.js"></script>
     <script type="text/javascript">
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/channel_id/");
+      xhr.open("GET", "/channel_id/");
       xhr.onreadystatechange = () => {
         if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
           var response = JSON.parse(xhr.response);
@@ -20,7 +20,7 @@
 
       function getDownstreamToken(channelId) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/downstream_token/");
+        xhr.open("GET", "/downstream_token/");
         xhr.onreadystatechange = () => {
           if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
             var response = JSON.parse(xhr.response);
