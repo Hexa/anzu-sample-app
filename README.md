@@ -10,4 +10,4 @@
 
 ## Contributors
 
-- [[Hexa]](https://github.com/Hexa) Hexa - creator, maintainer
+- [Hexa](https://github.com/Hexa) - creator, maintainer
