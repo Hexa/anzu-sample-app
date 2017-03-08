@@ -1,0 +1,35 @@
+<html lang="ja">
+  <head>
+    <title>down</title>
+  </head>
+  <body>
+    <h1>down</h1>
+    <video id="remote-video" autoplay=""></video>
+
+    <script src="/js/anzu.js"></script>
+    <script type="text/javascript">
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/channel_id/");
+      xhr.onreadystatechange = () => {
+        if ((xhr.readyState === XMLHttpRequest.DONE) && (xhr.status === 200)) {
+          var response = JSON.parse(xhr.response);
+          startAnzu(response.channelId);
+        }
+      };
+      xhr.send(null);
+
+      function startAnzu(channelId) {
+        var anzuDownstream = new Anzu("downstream");
+        anzuDownstream.start(channelId)
+          .then(params => {
+            var videoElement = document.getElementById("remote-video");
+            videoElement.src = window.URL.createObjectURL(params.stream);
+            videoElement.play();
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
